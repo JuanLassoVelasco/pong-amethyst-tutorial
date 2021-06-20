@@ -9,10 +9,11 @@ use amethyst::{
     },
     utils::application_root_dir,
 };
+use amethyst::core::transform::TransformBundle;
 
-pub struct Pong;
+mod pong;
 
-impl SimpleState for Pong {}
+use crate::pong::Pong;
 
 fn main() -> amethyst::Result<()> {
 
@@ -30,7 +31,7 @@ fn main() -> amethyst::Result<()> {
                 [0.0, 0.0, 0.0, 1.0]
             ),
         ).with_plugin(RenderFlat2D::default())
-    )?;
+    )?.with_bundle(TransformBundle::new())?;
 
     let assets_dir = app_root.join("assets");
     let mut game = Application::new(assets_dir, Pong, game_data)?;
