@@ -49,7 +49,6 @@ impl SimpleState for Pong {
 
         initialize_camera(world);
 
-        world.register::<Paddle>();
         initialize_paddles(world, sprite_sheet_handle);
     }
 }
