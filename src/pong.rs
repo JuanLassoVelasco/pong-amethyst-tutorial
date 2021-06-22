@@ -2,6 +2,9 @@ pub const ARENA_WIDTH: f32 = 100.0;
 pub const ARENA_HEIGHT: f32 = 100.0;
 pub const PADDLE_WIDTH: f32 = 4.0;
 pub const PADDLE_HEIGHT: f32 = 16.0;
+pub const BALL_VELOCITY_X: f32 = 55.0;
+pub const BALL_VELOCITY_Y: f32 = 30.0;
+pub const BALL_RADIUS: f32 = 2.0;
 
 use amethyst::{
     assets::{AssetStorage, Loader, Handle},
@@ -33,7 +36,16 @@ impl Paddle {
     }
 }
 
+pub struct Ball {
+    pub velocity: [f32; 2],
+    pub radius: f32,
+}
+
 impl Component for Paddle {
+    type Storage = DenseVecStorage<Self>;
+}
+
+impl Component for Ball {
     type Storage = DenseVecStorage<Self>;
 }
 
@@ -49,7 +61,8 @@ impl SimpleState for Pong {
 
         initialize_camera(world);
 
-        initialize_paddles(world, sprite_sheet_handle);
+        initialize_paddles(world, sprite_sheet_handle.clone());
+        initialize_ball(world, sprite_sheet_handle);
     }
 }
 
@@ -87,6 +100,24 @@ fn initialize_paddles(world: &mut World, sprite_sheet_handle: Handle<SpriteSheet
     world.create_entity().with(
         sprite_render
     ).with(Paddle::new(Side::Right)).with(right_transform).build();
+}
+
+fn initialize_ball(world: &mut World, sprite_sheet_handle: Handle<SpriteSheet>) {
+
+    // create ball transform component
+    let mut local_transform = Transform::default();
+
+    // set ball sprite
+    let sprite_render = SpriteRender::new(sprite_sheet_handle, 1);
+
+    // position ball in center
+    local_transform.set_translation_xyz(ARENA_WIDTH / 2.0, ARENA_HEIGHT / 2.0, 0.0);
+
+    world.create_entity().with(sprite_render)
+    .with(Ball {
+        velocity: [BALL_VELOCITY_X, BALL_VELOCITY_Y],
+        radius: BALL_RADIUS,
+    }).with(local_transform).build();
 }
 
 fn load_sprite_sheet(world: &mut World) -> Handle<SpriteSheet> {

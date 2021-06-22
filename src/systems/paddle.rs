@@ -4,7 +4,6 @@ use amethyst::core::{Transform, SystemDesc};
 use amethyst::derive::SystemDesc;
 use amethyst::ecs::{Join, Read, ReadStorage, System, SystemData, World, WriteStorage};
 use amethyst::input::{InputHandler, StringBindings};
-use amethyst::core::timing::Time;
 
 use crate::pong::{Paddle, Side, ARENA_HEIGHT, ARENA_WIDTH, PADDLE_HEIGHT};
 
