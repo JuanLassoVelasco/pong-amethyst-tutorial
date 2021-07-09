@@ -13,15 +13,11 @@ use amethyst::{
     ecs::{Component, DenseVecStorage},
     prelude::*,
     renderer::{Camera, ImageFormat, SpriteRender, SpriteSheet, SpriteSheetFormat, Texture},
-};
-use amethyst::{
-    // --snip--
     ecs::{Entity},
-};
-use amethyst::{
-    // ...
     ui::{Anchor, LineMode, TtfFormat, UiText, UiTransform},
 };
+
+use crate::audio::initialize_audio;
 
 #[derive(PartialEq, Eq)]
 pub enum Side {
@@ -91,6 +87,8 @@ impl SimpleState for Pong {
         initialize_paddles(world, self.sprite_sheet_handle.clone().unwrap());
 
         initialize_scoreboard(world);
+
+        initialize_audio(world);
     }
 
     fn update(&mut self, data: &mut StateData<'_, GameData<'_, '_>>) -> SimpleTrans {
