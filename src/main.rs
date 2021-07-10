@@ -21,6 +21,7 @@ use crate::audio::Music;
 mod pong;
 mod systems;
 mod audio;
+mod pause_state;
 
 use crate::pong::Pong;
 

@@ -15,9 +15,11 @@ use amethyst::{
     renderer::{Camera, ImageFormat, SpriteRender, SpriteSheet, SpriteSheetFormat, Texture},
     ecs::{Entity},
     ui::{Anchor, LineMode, TtfFormat, UiText, UiTransform},
+    input::{is_close_requested, VirtualKeyCode, is_key_down},
 };
 
 use crate::audio::initialize_audio;
+use crate::pause_state::PauseState;
 
 #[derive(PartialEq, Eq)]
 pub enum Side {
@@ -107,6 +109,22 @@ impl SimpleState for Pong {
         
 
         Trans::None
+    }
+
+    fn handle_event(&mut self, mut _data: StateData<'_, GameData<'_, '_>>, event: StateEvent) -> SimpleTrans {
+        if let StateEvent::Window(event) = &event {
+            if is_close_requested(&event) || is_key_down(&event, VirtualKeyCode::Escape) {
+                return Trans::Quit;
+            } else if is_key_down(&event, VirtualKeyCode::P) {
+                return Trans::Push(Box::new(PauseState::default()));
+            }
+        }
+
+        Trans::None
+    }
+
+    fn on_resume(&mut self, mut _data: StateData<'_, GameData<'_, '_>>) {
+        println!("Game Resumed");
     }
 }
 
